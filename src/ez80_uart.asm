@@ -1,15 +1,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TurBoss 2025
 ;;
-;; UART ez80f92
+;; UART1 ez80f92
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	ASSUME ADL = 0								; set 16bit mode
 
 	SECTION code_user
 	
+	PUBLIC	uart_init
 	PUBLIC	_uart_init
+	PUBLIC	uart_put
 	PUBLIC	_uart_put
+	PUBLIC	uart_get
 	PUBLIC	_uart_get
 
 	#include "ez80f92.inc"
@@ -40,8 +43,9 @@
 
 
 
+uart_init:
 _uart_init:
-												; all pins to GPIO mode 2, high impedance input
+								; all pins to GPIO mode 2, high impedance input
 	LD A, PORTC_DRVAL_DEF
 	OUT0 (PC_DR),A
 	LD A, PORTC_DDRVAL_DEF
@@ -85,10 +89,11 @@ _uart_init:
 	OR  00000011b								; 8 databits, 1 stopbit
 	AND 11110111b								; no parity
 	OUT0 (UART1_LCTL),A
-	
+
 	RET
 
 
+uart_put:
 _uart_put:
 	PUSH	AF
 @uart_avail:
@@ -100,12 +105,13 @@ _uart_put:
 	RET
 
 
+uart_get:
 _uart_get:
-@uart_avail:
+;@uart_avail:
 	IN0		A,				(UART1_LSR)
 	BIT		0,				A					; Check if the receive buffer is full
-	JR 		Z,				@uart_avail									; immediately if no character is available
-;	RET		Z									; immediately if no character is available
+;	JR 		Z,				@uart_avail			; immediately if no character is available
+	RET		Z									; immediately if no character is available
 	IN0		E,				(UART1_RBR)			; Read the character from the receive buffer
 	RET
 

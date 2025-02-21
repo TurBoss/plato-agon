@@ -1,9 +1,10 @@
 /**
- * PLATOTerm64 - A PLATO Terminal for the Commodore 64
+ * PLATOTerm - A PLATO Terminal for the Agon Light
  * Based on Steve Peltz's PAD
  * 
  * Author: Thomas Cherryhomes <thom.cherryhomes at gmail dot com>
- * This file written by Steve Peltz. Copyright notice preserved.
+ * Ported to AgonLight by TurBoss 2025
+ * 
  * and this code has been used with permission, and can be considered
  * public domain.
  *

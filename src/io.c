@@ -14,7 +14,7 @@
 
 extern void uart_init();
 extern void uart_put(unsigned char);
-extern unsigned char uart_geh(void);
+extern unsigned char uart_get(void);
 
 static unsigned char inb;
 char rxdata[rxbuffersize];
@@ -113,13 +113,14 @@ void io_main(void) { // NEW ADAPTIVE BUFFERED SERIAL CONNECTION !!
 			//rs232_get(&inb);
 
 			inb = uart_get();
-			if (inb != RS_ERR_NO_DATA) {
-				printf("GOT DATA \0");
-				printf("0x%02x\r\n\0",inb);
+			if (inb != NULL) {
+				cprintf("GOT DATA \0");
+				cprintf("0x%s\r\n\0",inb);
 				rxdata[bytes] = inb;
 				bytes++;
+				msleep(rxdelay);  // Hold off to get a buffer load
 			} else {
-				printf("GOT NO DATA\r\n\0");
+				//printf("GOT NO DATA\r\n\0");
 				inb = RS_ERR_NO_DATA;
 			}
 		}
