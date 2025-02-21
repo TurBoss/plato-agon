@@ -113,7 +113,7 @@ void io_main(void) { // NEW ADAPTIVE BUFFERED SERIAL CONNECTION !!
 			//rs232_get(&inb);
 
 			inb = uart_get();
-			if (inb != NULL) {
+			if (inb != RS_ERR_NO_DATA) {
 				cprintf("GOT DATA \0");
 				cprintf("0x%s\r\n\0",inb);
 				rxdata[bytes] = inb;
